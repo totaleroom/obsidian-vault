@@ -43,11 +43,11 @@
 | Linear reference | `~/projects/site-clones/linear-app/` | CSS extraction blocked by CSP |
 
 ## Connected Accounts (via Zernio)
-| Platform | Account | Status |
-|----------|---------|--------|
-| Threads | @yurayr | ✅ Active |
+| Platform | Account            | Status   |
+| -------- | ------------------ | -------- |
+| Threads  | @yurayr            | ✅ Active |
 | LinkedIn | Yuradhyan Ramadhan | ✅ Active |
-| Telegram | Totale Room | ✅ Active |
+| Telegram | Totale Room        | ✅ Active |
 
 ## Known IOC / Threats (Security)
 - C2: pyats.top, 45.83.122.25/ozen.us

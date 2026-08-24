@@ -22,12 +22,12 @@
 **Note:** NaN arc bug in glue flap SVG paths — needs fixing
 **Vision:** Same as diecuttemplates.com
 
-### `mantra-ai-dashboard`
-**Path:** `/home/hermes/projects/mantra-ai-dashboard`
+### `mantra-ai-dashboard` (ACTIVE: `mantra-ai-dashboard-final`)
+**Path:** `/home/hermes/projects/mantra-ai-dashboard-final`
 **Type:** Next.js SaaS — WhatsApp CRM + Knowledge Base + AI
-**Stack:** Next.js, Vercel, Supabase (inferred)
+**Stack:** Next.js, Prisma, PostgreSQL, port 3003
 **Purpose:** Omnichannel CRM with WhatsApp integration, knowledge base, AI-powered inbox
-**Related:** `mantra-ai-dashboard-final` (可能是 staging/clean copy)
+**Active:** `ai.mantraroom.my.id` → port 3003 (prev `mantra-ai-dashboard` on 3002 was stale)
 
 ### `hermes-agent-obsidian-plugin`
 **Path:** `/home/hermes/projects/hermes-agent-obsidian-plugin`
@@ -185,7 +185,7 @@
 |---------|------|--------|----------|
 | `mantra-forge` | `/opt/mantra-forge` | ⚠️ Production | Critical |
 | `dieline-studio` | `~/projects/dieline-studio` | 🟡 Active | High |
-| `mantra-ai-dashboard` | `~/projects/mantra-ai-dashboard` | 🟡 Active | High |
+| `mantra-ai-dashboard` | `~/projects/mantra-ai-dashboard-final` | 🟢 Active (3003) | High |
 | `hermes-agent-obsidian-plugin` | `~/projects/hermes-agent-obsidian-plugin` | 🟡 Active | Medium |
 | `ecc-repo` | `~/projects/ecc-repo` | 🟢 Research | Medium |
 | `portfolio-totale` | `~/projects/portfolio-totale` | 🟢 Active | Medium |

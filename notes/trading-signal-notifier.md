@@ -1,29 +1,34 @@
 ---
 date: 2026-01-11
+updated: 2026-10-05
 source: Hermes Agent setup
-tags: [trading, signals, technical-analysis, automation, cron]
+tags: [trading, signals, technical-analysis, sector-heatmap, automation, cron, reasoning-engine]
 ---
 
-# Trading Signal Notifier — Setup
+# Trading Signal Notifier v1.1 — Advanced Setup
 
 ## Stack
-- **Data source**: Binance OHLCV (free, no API key) via `ccxt`
-- **Indicators**: pandas-ta (RSI, MACD, BB, Stochastic RSI, MA confluence)
-- **Multi-timeframe**: 1W, 1D, 4H, 1H, 5m
-- **Notifications**: Telegram bot `@hermes_metal_bot`
 - **Python**: 3.12 venv at `/home/hermes/.venv/trading`
+- **Data**: Binance OHLCV (free, no API key) via `ccxt`
+- **Indicators**: pandas-ta (RSI, MACD, BB, Stochastic RSI, MA, ADX, ATR)
+- **Sector Classification**: 40+ pairs mapped to 20+ sectors
+- **Notifications**: Telegram `@hermes_metal_bot`
+- **Python**: `/home/hermes/.venv/trading`
 
 ## File Structure
 ```
 /home/hermes/projects/trading-bot/
 ├── analysis/
-│   └── mtf_engine.py      # Multi-timeframe analyzer
+│   ├── mtf_engine.py          # Basic multi-timeframe engine
+│   ├── reasoning_engine.py    # Advanced reasoning + TP/SL engine
+│   └── auto_discover.py       # Sector heatmap + pair discovery
 ├── config/
-│   └── indicators.py       # Indicator configs per TF
-├── scan_and_notify.py      # CLI scanner + Telegram sender
-├── send_report.py         # Full report to Telegram
+│   ├── indicators.py          # Indicator configs per TF
+│   └── pairs.py               # Watchlist + sector map
+├── daily_report.py            # Full report (sector heatmap + reasoning + TP)
+├── scan_and_notify.py         # Quick scan (15 min cron)
 └── webhooks/
-    └── server.py          # Flask webhook server
+    └── server.py              # Flask webhook server
 ```
 
 ## Activation
@@ -31,38 +36,49 @@ tags: [trading, signals, technical-analysis, automation, cron]
 source /home/hermes/.venv/trading/bin/activate
 ```
 
-## Run Scan
+## Run Daily Report
 ```bash
 cd /home/hermes/projects/trading-bot
-python3 scan_and_notify.py
+python3 daily_report.py
 ```
 
-## Cron Job
-- Job ID: `67f25ac7a659`
-- Schedule: `*/15 * * * *` (every 15 minutes)
-- Delivers to: Telegram (@TotaleMetal)
+## Report Features
+1. **Sector Heatmap** — Scans 20+ sectors, ranks by 4H performance + RSI + volume
+2. **Top Movers** — 24H gainers with sector tags
+3. **High Confidence Signals** — >70% confidence signals first
+4. **All BUY/SELL Signals** — With TP/SL/Risk-Reward
+5. **Emerging Setups** — Auto-discovered pairs with good entries
+6. **Deep Dive** — BTC & ETH reasoning breakdown
+7. **Take Profit Levels** — TP1, TP2, TP3 based on ATR + S/R
+8. **Stop Loss** — Calculated from ATR
 
-## Telegram Token
+## Scheduled Reports (WIB)
+| Time | Job ID | Description |
+|------|--------|-------------|
+| 7 AM | `40b1cb334184` | Morning scan |
+| 11 AM | `51e5abe66224` | Midday check |
+| 3 PM | `fcbdb9b4d195` | Afternoon review |
+| 10 PM | `ff9ad62231b3` | Night report |
+| 1 AM | `03b0854ef60d` | Late night scan |
+| 15 min | `67f25ac7a659` | Quick entry scan |
+
+## Sector Classification
+Sectors tracked: Layer 1, Layer 2, DeFi (DEX, Lending, Stablecoin, Perpetuals, Liquid Staking), AI (Compute, GPU, Agents, ML), DePIN, Gaming, Meme, Exchange, Institutional, Oracle, Storage, BTC L2, Interoperability, Data Availability
+
+## Signal Scoring
+- Score >= 4 + HTF alignment = actionable signal
+- Confidence = score/10 * 100 (max 95%)
+- BUY: HTF bullish + oversold + bullish patterns
+- SELL: HTF bearish + overbought + bearish patterns
+
+## Telegram
 - Bot: `@hermes_metal_bot`
-- Token stored at: `/tmp/hermes_telegram_token`
+- Token: `/tmp/hermes_telegram_token`
 - Chat ID: `7768094471` (Totale Metal)
 
-## Indicators Per Timeframe
-
-| Timeframe | Primary Focus |
-|-----------|-------------|
-| 1W, 1D | Trend (MA crossover), RSI, MACD direction |
-| 4H, 1H | Momentum (RSI, MACD cross), BB squeeze |
-| 5m | Entry timing (candlestick patterns, BB touch) |
-
-## Signal Score System
-- Score >= 4 = actionable signal
-- BUY: HTF trend aligned + oversold/reversal signals on lower TFs
-- SELL: HTF trend aligned + overbought/reversal signals on lower TFs
-
-## Next Improvements
-- [ ] Add support/resistance levels to alerts
-- [ ] TradingView webhook endpoint (`/webhook/tradingview`)
-- [ ] More pairs (AVAX, LINK, DOGE, ADA)
+## Todo
+- [ ] Add more pairs to sector map
+- [ ] Win rate tracking (log signals + outcomes)
+- [ ] TradingView webhook endpoint
 - [ ] Backtesting module
-- [ ] Win rate tracking
+- [ ] More sophisticated reasoning (market structure, order flow hints)
